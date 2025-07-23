@@ -54,11 +54,16 @@
  *        |true => 값1
  *        |false => 값2 
  */
+// 80page => 부호연산자 (+,-) => 음수 , 양수 
 public class 단항연산자 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+        int a=-100;
+        System.out.println(a);
+        a=-a;
+        System.out.println(a);
+        // 양수 : default => +표현을 하지 않는다 
 	}
 
 }
