@@ -120,13 +120,10 @@ public class 정리문제 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-        //int i=10;
-        //byte b=(byte)i;
-		byte b=10;
-		char c='A';
-		//c=b; 
-		// char c=65
-		char cc=' ';
+        boolean b=Double.isInfinite(10/0.0);
+        System.out.println(b);
+        b=Double.isNaN(10%0.0);
+        System.out.println(b);
 	}
 
 }
