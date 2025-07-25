@@ -42,12 +42,56 @@
  *                   => 화면 출력 
  *   반복제어문 : break : 종료 
  *             continue : 특정부분을 제외 
+ *   
  */
+/*
+ *   제어문 
+ *    => 단일 조건문 
+ *       형식)
+ *            if(조건문) => 부정연산자 , 논리연산자 , 비교연산자 
+ *            {
+ *               조건 => true명 수행하는 문장 
+ *            }
+ *                ↓     false
+ *            if(조건문) ---------
+ *            {    | true       |
+ *               수행문장 
+ *                 |            |
+ *            }    |            |
+ *                 |            |
+ *            -------------------
+ *                    |
+ *                    |
+ *          => 자바에서 사용하는 모든 제어문은 바로 밑에 있는 문장 한개만 수행
+ *          
+ *          if(조건문)
+ *            문장 1 ==> 여기만 수행 
+ *            문장 2 ==> if와 관계없는 문장 => 무조건 수행하는 문장 
+ *            
+ *          여러개 문장을 동시 수행 
+ *          if(조건문)
+ *          {
+ *             문장 1
+ *             문장 2
+ *             ...
+ *          }
+ *          권장 ==> {} 
+ */
+// 1. 정수 입력 => 짝수 / 홀수 
+import java.util.Scanner;
 public class 제어문 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+        Scanner scan=new Scanner(System.in);
+        System.out.print("정수 입력:");
+        // 입력값을 저장 
+        int num=scan.nextInt();
+        
+        if(num%2==0)
+        	System.out.println(num+"는(은) 짝수다");
+        if(num%2!=0)
+        	System.out.println(num+"는(은) 홀수다");
 	}
 
 }
