@@ -17,7 +17,7 @@ public class 배열_10 {
         		// 중복 
         		for(int j=0;j<i;j++) 
         		{
-        			if(lotto[i]==lotto[j])// 중복이면 -> WHILE이동
+        			if(lotto[j]==su)// 중복이면 -> WHILE이동
         			{
         				bCheck=true;
         				break;
