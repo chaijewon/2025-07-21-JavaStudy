@@ -118,46 +118,55 @@ public class 정리_3 {
         		"버섯:mushroom",
         		"미역:seaweed"
         };
-		Scanner scan=new Scanner(System.in);
-		System.out.print("검색어 입력:");
-		String fd=scan.next();
+		//System.out.println(arr.length);
+		String[] daps=new String[69];
+		String[] mnuje=new String[69];
 		
-		// 배열 / Collection => 데이터모음 JDK1.5
-		// 실무 => 목록 출력시에 자주 사용 
-		boolean bCheck=false;
-		for(String f:arr)// 향상됨  for => for-each
+		for(int i=0;i<daps.length;i++)
 		{
-			//System.out.println(f);
-			if(f.contains(fd)) // startsWith
-			{
-				/*
-				 *   [가-힣] 한글전체 
-				 *   [0-9] 숫자전체 
-				 *   [A-Za-z] 알파벳 전체 
-				 *   
-				 *   [^가-힣] !한글전체 
-				 *   [^0-9] !숫자전체 
-				 *   [^A-Za-z] !알파벳 전체 
-				 *   
-				 *   ^[가-힣] 한글로 시작 
-				 *   ^[0-9] 숫자 시작 
-				 *   ^[A-Za-z] 알파벳 시작 
-				 *   
-				 *   ^[가-힣]{3} 한글로 시작  가나다aaaaa 가나aaaa(X)
-				 *   ^[0-9]{1,3} 숫자 시작 1A 12A 123A  
-				 *   ^[A-Za-z] 알파벳 시작  
-				 *   
-				 *   => 파이썬 : 자연어처리 
-				 */
-				//System.out.println(f.replaceAll("[^A-Za-z]","" ));
-				String s=f.substring(f.indexOf(":")+1);
-				System.out.println(s);
-				bCheck=true;
-			}
 			
 		}
-		if(bCheck==false)
-			System.out.println("검색 결과가 없습니다");
+		
+//		Scanner scan=new Scanner(System.in);
+//		System.out.print("검색어 입력:");
+//		String fd=scan.next();
+//		
+//		// 배열 / Collection => 데이터모음 JDK1.5
+//		// 실무 => 목록 출력시에 자주 사용 
+//		boolean bCheck=false;
+//		for(String f:arr)// 향상됨  for => for-each
+//		{
+//			//System.out.println(f);
+//			if(f.contains(fd)) // startsWith
+//			{
+//				/*
+//				 *   [가-힣] 한글전체 
+//				 *   [0-9] 숫자전체 
+//				 *   [A-Za-z] 알파벳 전체 
+//				 *   
+//				 *   [^가-힣] !한글전체 
+//				 *   [^0-9] !숫자전체 
+//				 *   [^A-Za-z] !알파벳 전체 
+//				 *   
+//				 *   ^[가-힣] 한글로 시작 
+//				 *   ^[0-9] 숫자 시작 
+//				 *   ^[A-Za-z] 알파벳 시작 
+//				 *   
+//				 *   ^[가-힣]{3} 한글로 시작  가나다aaaaa 가나aaaa(X)
+//				 *   ^[0-9]{1,3} 숫자 시작 1A 12A 123A  
+//				 *   ^[A-Za-z] 알파벳 시작  
+//				 *   
+//				 *   => 파이썬 : 자연어처리 
+//				 */
+//				//System.out.println(f.replaceAll("[^A-Za-z]","" ));
+//				String s=f.substring(f.indexOf(":")+1);
+//				System.out.println(s);
+//				bCheck=true;
+//			}
+//			
+//		}
+//		if(bCheck==false)
+//			System.out.println("검색 결과가 없습니다");
 
 	}
 
