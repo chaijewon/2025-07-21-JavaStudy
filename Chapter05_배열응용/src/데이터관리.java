@@ -18,7 +18,7 @@ public class 데이터관리 extends JFrame implements ActionListener{
   String[] actors=new String[1938];
   String[] genres=new String[1938];
   String[] grades=new String[1938];
-  
+  TableColumn column;
   // 초기화 
   public 데이터관리()
   {
@@ -87,6 +87,23 @@ public class 데이터관리 extends JFrame implements ActionListener{
 	  JScrollPane js=new JScrollPane(table);
 	  js.setBounds(10, 60, 760, 500);
 	  add(js);
+	  
+	  for(int i=0;i<col.length;i++)
+	  {
+		  column=table.getColumnModel().getColumn(i);
+		  if(i==0)
+			  column.setPreferredWidth(30);
+		  else if(i==1)
+			  column.setPreferredWidth(150);
+		  else if(i==2)
+			  column.setPreferredWidth(200);
+		  else if(i==3)
+			  column.setPreferredWidth(150);
+		  else if(i==4)
+			  column.setPreferredWidth(40);
+	  }
+	  
+	  
 	  for(int i=0;i<titles.length;i++)
 	  {
 		  String[] datas= {
@@ -98,6 +115,7 @@ public class 데이터관리 extends JFrame implements ActionListener{
 		  };
 		  model.addRow(datas);
 	  }
+	  
 	  setSize(800, 600);
 	  setVisible(true);
 	  btn.addActionListener(this);
