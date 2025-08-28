@@ -2,6 +2,10 @@ package com.sist.client;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.text.Document;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+
 import java.awt.event.*;
 import java.net.*;
 import com.sist.dao.*;
@@ -14,11 +18,14 @@ implements ActionListener,MouseListener
     Login login=new Login();
     JoinForm join=new JoinForm();
     PostFindForm post=new PostFindForm();
+    WaitRoom wr=new WaitRoom();
     public ClientMainForm()
     {
     	setLayout(card);
+    	add("wr",wr);
     	add("login",login);
     	add("join",join);
+    	
     	setSize(800, 600);
     	setVisible(true);
     	setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -91,6 +98,7 @@ implements ActionListener,MouseListener
 				// 서버 연결 
 				JOptionPane.showMessageDialog(this, "로그인되었습니다.");
 				setTitle(vo.getName());
+				card.show(getContentPane(), "wr");
 			}
 		}
 		else if(e.getSource()==login.b2)
@@ -261,5 +269,42 @@ implements ActionListener,MouseListener
 		// TODO Auto-generated method stub
 		
 	}
-
+    // 공통 적용 
+	public void initStyle()
+	   {
+		   Style green=wr.pane.addStyle("green", null);
+		   StyleConstants.setForeground(green, Color.green);
+		   
+		   Style yellow=wr.pane.addStyle("yellow", null);
+		   StyleConstants.setForeground(yellow, Color.yellow);
+		   
+		   Style blue=wr.pane.addStyle("blue", null);
+		   StyleConstants.setForeground(blue, Color.blue);
+		   
+		   Style pink=wr.pane.addStyle("pink", null);
+		   StyleConstants.setForeground(pink, Color.pink);
+		   
+		   Style cyan=wr.pane.addStyle("cyan", null);
+		   StyleConstants.setForeground(cyan, Color.cyan);
+		   
+		   Style orange=wr.pane.addStyle("orange", null);
+		   StyleConstants.setForeground(orange, Color.orange);
+		   
+		   Style magenta=wr.pane.addStyle("magenta", null);
+		   StyleConstants.setForeground(magenta, Color.magenta);
+	       
+		   Style red=wr.pane.addStyle("red", null);
+		   StyleConstants.setForeground(red, Color.red);
+		   
+	   }
+	   public void append(String msg,String color)
+	   {
+		   try
+		   {
+			   Document doc=wr.pane.getDocument();
+			   doc.insertString(doc.getLength(), msg+"\n",
+					   wr.pane.getStyle(color));
+		   }catch(Exception ex){}
+	   }
+	
 }
