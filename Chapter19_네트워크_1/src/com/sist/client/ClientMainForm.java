@@ -2,9 +2,8 @@ package com.sist.client;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.text.Document;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
+import javax.swing.text.*;
+
 
 import java.awt.event.*;
 import java.net.*;
@@ -22,8 +21,9 @@ implements ActionListener,MouseListener
     public ClientMainForm()
     {
     	setLayout(card);
-    	add("wr",wr);
     	add("login",login);
+    	add("wr",wr);
+    	
     	add("join",join);
     	
     	setSize(800, 600);
@@ -43,6 +43,9 @@ implements ActionListener,MouseListener
     	post.b2.addActionListener(this);
     	post.tf.addActionListener(this);
     	post.table.addMouseListener(this);
+    	
+    	
+    	wr.tf.addActionListener(this);
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -232,6 +235,19 @@ implements ActionListener,MouseListener
 		{
 			post.setVisible(false);
 		}
+		else if(e.getSource()==wr.tf)
+		{
+			String msg=wr.tf.getText();
+			if(msg.length()<1)
+			{
+				return;
+			}
+			
+			String color=wr.box.getSelectedItem().toString();
+			initStyle();
+			append(msg, color);
+			wr.tf.setText("");
+		}
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -286,9 +302,6 @@ implements ActionListener,MouseListener
 		   
 		   Style cyan=wr.pane.addStyle("cyan", null);
 		   StyleConstants.setForeground(cyan, Color.cyan);
-		   
-		   Style orange=wr.pane.addStyle("orange", null);
-		   StyleConstants.setForeground(orange, Color.orange);
 		   
 		   Style magenta=wr.pane.addStyle("magenta", null);
 		   StyleConstants.setForeground(magenta, Color.magenta);

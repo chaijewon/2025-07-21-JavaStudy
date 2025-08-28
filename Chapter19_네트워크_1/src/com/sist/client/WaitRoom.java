@@ -46,6 +46,7 @@ public class WaitRoom extends JPanel{
 	   JScrollPane js3=new JScrollPane(pane);
 	   js3.setBounds(420, 15, 360, 350);
 	   add(js3);
+	   pane.setEditable(false);
 	   
 	   tf=new JTextField();
 	   tf.setBounds(420,370, 250, 30);
