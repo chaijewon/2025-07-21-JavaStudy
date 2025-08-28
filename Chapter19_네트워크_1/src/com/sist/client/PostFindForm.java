@@ -8,6 +8,7 @@ public class PostFindForm extends JFrame{
     JButton b1,b2;
     JTable table;
     DefaultTableModel model;
+    JScrollPane js;
     public PostFindForm()
     {
     	tf=new JTextField(13);
@@ -25,7 +26,7 @@ public class PostFindForm extends JFrame{
     		
     	};
     	table=new JTable(model);
-    	JScrollPane js=new JScrollPane(table);
+    	js=new JScrollPane(table);
     	
     	JPanel p=new JPanel();
     	p.add(tf);p.add(b1);p.add(b2);
@@ -33,6 +34,7 @@ public class PostFindForm extends JFrame{
     	add("North",p);
     	add("Center",js);
     	setSize(450, 350);
+    	//js.setVisible(false);
     	//setVisible(true);
     }
 //    public static void main(String[] args) {

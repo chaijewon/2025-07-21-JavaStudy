@@ -1,4 +1,7 @@
 package com.sist.dao;
+
+import lombok.Data;
+
 /*
  *   ID    NOT NULL VARCHAR2(20)  
 		PWD   NOT NULL VARCHAR2(10)  
@@ -7,6 +10,7 @@ package com.sist.dao;
 		ADDR1 NOT NULL VARCHAR2(250) 
 		ADDR2          VARCHAR2(200)
  */
+@Data
 public class MemberVO {
   private String id;
   private String pwd;
@@ -15,4 +19,5 @@ public class MemberVO {
   private String addr1;
   private String addr2;
   private int login;
+  private String msg;
 }

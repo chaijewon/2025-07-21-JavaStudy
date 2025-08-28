@@ -56,7 +56,42 @@ implements ActionListener,MouseListener
 		}
 		else if(e.getSource()==login.b1)
 		{
+			String id=login.tf.getText();
+			if(id.trim().length()<1)
+			{
+				JOptionPane.showMessageDialog(this, "ID를 입력하세요");
+				login.tf.requestFocus();
+				return;
+			}
+			String pwd=String.valueOf(login.pf.getPassword());
+			if(pwd.trim().length()<1)
+			{
+				JOptionPane.showMessageDialog(this, "비밀번호를 입력하세요");
+				login.pf.requestFocus();
+				return;
+			}
 			
+			MemberDAO dao=MemberDAO.newInstance();
+			MemberVO vo=dao.memberLogin(id, pwd);
+			if(vo.getMsg().equals("NOID"))
+			{
+				JOptionPane.showMessageDialog(this, "ID가 존재하지 않습니다!!");
+				login.tf.setText("");
+				login.pf.setText("");
+				login.tf.requestFocus();
+			}
+			else if(vo.getMsg().equals("NOPWD"))
+			{
+				JOptionPane.showMessageDialog(this, "비밀번호가 틀립니다!!");
+				login.pf.setText("");
+				login.pf.requestFocus();
+			}
+			else
+			{
+				// 서버 연결 
+				JOptionPane.showMessageDialog(this, "로그인되었습니다.");
+				setTitle(vo.getName());
+			}
 		}
 		else if(e.getSource()==login.b2)
 		{
@@ -71,12 +106,89 @@ implements ActionListener,MouseListener
 			}
 			post.setVisible(true);
 		}
+		/*
+		 *   목록 => 페이징
+		 *   입력 
+		 *   수정 
+		 *   삭제
+		 *   상세보기 
+		 */
+		else if(e.getSource()==join.b3) // 회원가입
+		{
+			// 유효성 검사 
+			String id=join.tf1.getText();
+			if(id.length()<1)
+			{
+				JOptionPane.showMessageDialog(this, "ID를 입력하세요");
+				join.tf1.requestFocus();
+				return;
+			}
+			
+			String pwd=String.valueOf(join.pf.getPassword());
+			if(pwd.length()<1)
+			{
+				JOptionPane.showMessageDialog(this, "비밀번호를 입력하세요");
+				join.pf.requestFocus();
+				return;
+			}
+			
+			String name=join.tf2.getText();
+			if(name.length()<1)
+			{
+				JOptionPane.showMessageDialog(this, "이름을 입력하세요");
+				join.tf2.requestFocus();
+				return;
+			}
+			
+			String post1=join.tf3.getText();
+			if(post1.length()<1)
+			{
+				JOptionPane.showMessageDialog(this, "우편번호 검색을 클릭하세요");
+				join.tf3.requestFocus();
+				return;
+			}
+			
+			String addr1=join.tf4.getText();
+			String addr2=join.tf5.getText();
+			
+			MemberVO vo=new MemberVO();
+			vo.setId(id);
+			vo.setPwd(pwd);
+			vo.setName(name);
+			vo.setPost(post1);
+			vo.setAddr1(addr1);
+			vo.setAddr2(addr2);
+			
+			MemberDAO dao=MemberDAO.newInstance();
+			int res=dao.memberJoin(vo);
+			
+			if(res==0)
+			{
+				JOptionPane.showMessageDialog(this, 
+						"회원 가입 실패하셨습니다\n"
+						+"다시 회원가입을 하세요");
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(this, 
+						"🎉🎉회원가입을 축합니다!!\n"
+						+"로그인창으로 이동합니다");
+				card.show(getContentPane(), "login");
+			}
+			
+			
+		}
+		else if(e.getSource()==join.b4)
+		{
+			card.show(getContentPane(), "login");
+		}
 		else if(e.getSource()==post.b1 || e.getSource()==post.tf)
 		{
 			String dong=post.tf.getText();
 			if(dong.length()<1)
 			{
-				JOptionPane.showMessageDialog(this, "동/읍/면을 입력하세요");
+				//post.js.setVisible(false);
+				JOptionPane.showMessageDialog(post, "동/읍/면을 입력하세요");
 				post.tf.requestFocus();
 				return;
 			}
@@ -85,6 +197,7 @@ implements ActionListener,MouseListener
 			java.util.List<ZipcodeVO> list=dao.postFind(dong);
 			if(list.size()>0)
 			{
+				//post.js.setVisible(true);
 				for(int i=post.model.getRowCount()-1;i>=0;i--)
 				{
 					post.model.removeRow(i);
@@ -101,7 +214,8 @@ implements ActionListener,MouseListener
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(this, "검색 결과가 없습니다");
+				//post.js.setVisible(false);
+				JOptionPane.showMessageDialog(post, "검색 결과가 없습니다");
 				post.tf.setText("");
 				post.tf.requestFocus();
 			}

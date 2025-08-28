@@ -25,7 +25,7 @@ public class JoinForm extends JPanel{
 	  
 	  la2=new JLabel("ID",JLabel.CENTER);
 	  tf1=new JTextField();
-	  tf1.setEnabled(false);
+	  //tf1.setEnabled(false);
 	  b1=new JButton("중복체크");
 	  
 	  la2.setBounds(110, 110, 60, 30);
@@ -52,19 +52,19 @@ public class JoinForm extends JPanel{
 	  tf3.setBounds(175, 215, 120, 30);
 	  b2.setBounds(300, 215, 130, 30);
 	  add(la5);add(tf3);add(b2);
-	  
+	  tf3.setEnabled(false);
 	  la6=new JLabel("주소",JLabel.CENTER);
 	  tf4=new JTextField();
 	  la6.setBounds(110, 250, 60, 30);
 	  tf4.setBounds(175, 250, 300, 30);
 	  add(la6);add(tf4);
-	  
+	  tf4.setEnabled(false);
 	  la7=new JLabel("상세주소",JLabel.CENTER);
 	  tf5=new JTextField();
 	  la7.setBounds(110, 285, 60, 30);
 	  tf5.setBounds(175, 285, 300, 30);
 	  add(la7);add(tf5);
-	  
+	  // 2000 
 	  b3=new JButton("회원가입");
 	  b4=new JButton("취소");
 	  JPanel p=new JPanel();

@@ -87,5 +87,96 @@ public class MemberDAO {
   }
   // 2. ID체크
   // 3. 회원가입 
+  public int memberJoin(MemberVO vo)
+  {
+	  int result=0;
+	  try
+	  {
+		  getConnection();
+		  String sql="INSERT INTO member VALUES("
+				    +"?,?,?,?,?,?,0)";
+		  // 전송 
+		  ps=conn.prepareStatement(sql);
+		  // 실행요청전에 ?에 값을 채운다 
+		  ps.setString(1, vo.getId());
+		  ps.setString(2, vo.getPwd());
+		  ps.setString(3, vo.getName());
+		  ps.setString(4, vo.getPost());
+		  ps.setString(5, vo.getAddr1());
+		  ps.setString(6, vo.getAddr2());
+		  
+		  // 실행 
+		  result=ps.executeUpdate();
+	  }catch(Exception ex)
+	  {
+		  ex.printStackTrace();
+	  }
+	  finally
+	  {
+		  disConnection();
+	  }
+	  return result;
+  }
   // 4. 로그인 
+  public MemberVO memberLogin(String id,String pwd)
+  {
+	  MemberVO vo=new MemberVO();
+	  try
+	  {
+		  //1. 연결 
+		  getConnection();
+		  //2. SQL문장 
+		  String sql="SELECT COUNT(*) FROM member "
+				    +"WHERE id=?";
+		  //3. 결과값 받기 
+		  ps=conn.prepareStatement(sql);
+		  //4. ?가 있는 경우에는 반드시 ?에 값을 채운다 
+		  ps.setString(1, id);
+		  ResultSet rs=ps.executeQuery();
+		  rs.next();
+		  int count=rs.getInt(1);
+		  rs.close();
+		  
+		  if(count==0)
+		  {
+			  vo.setMsg("NOID");
+		  }
+		  else
+		  {
+			  sql="SELECT pwd,name,addr1 FROM member "
+				 +"WHERE id=?";
+			  ps=conn.prepareStatement(sql);
+			  ps.setString(1, id);
+			  rs=ps.executeQuery();
+			  rs.next();
+			  String db_pwd=rs.getString(1);
+			  String name=rs.getString(2);
+			  String addr=rs.getString(3);
+			  rs.close();
+			  
+			  if(db_pwd.equals(pwd))
+			  {
+				  vo.setMsg("OK");
+				  vo.setId(id);
+				  vo.setAddr1(addr);
+				  vo.setName(name);
+			  }
+			  else
+			  {
+				  vo.setMsg("NOPWD");
+			  }
+			  
+			  
+		  }
+		  
+	  }catch(Exception ex)
+	  {
+		  ex.printStackTrace();
+	  }
+	  finally
+	  {
+		  disConnection();
+	  }
+	  return vo;
+  }
 }
