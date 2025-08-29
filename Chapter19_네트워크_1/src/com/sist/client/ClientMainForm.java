@@ -36,6 +36,7 @@ implements ActionListener,MouseListener,Runnable
     String myId;
     // => 모든 클라이어언트는 서버의 명령을 받아서 처리 
     // 서버 : 관리자 , 클라이언트 : 노예 
+    int selectRow=-1;
     public ClientMainForm()
     {
     	setLayout(card);
@@ -63,7 +64,25 @@ implements ActionListener,MouseListener,Runnable
     	post.table.addMouseListener(this);
     	
     	
-    	wr.tf.addActionListener(this);
+    	wr.tf.addActionListener(this); // 대기실 채팅 
+    	wr.b6.addActionListener(this); // 나가기 
+    	wr.b5.addActionListener(this); // 정보 => ID
+    	
+    	addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				try
+				{
+					out.write((Function.CHATEND+"|\n").getBytes());
+				}catch(Exception ex) {}
+			}
+    		 
+		});
+    	
+    	wr.table2.addMouseListener(this);
+    	wr.b4.addActionListener(this);
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -286,10 +305,41 @@ implements ActionListener,MouseListener,Runnable
 			}
 			
 			String color=wr.box.getSelectedItem().toString();
-			initStyle();
-			append(msg, color);
+			try
+			{
+			  // 서버로 채팅 전송 
+			  out.write((Function.WAITCHAT+"|"
+					 +msg+"|"+color+"\n").getBytes());
+			  // 요청 => Server에서 처리 응답 
+			}catch(Exception ex) {}
+			
 			wr.tf.setText("");
 		}
+		// 이벤트 처리(client) => 서버 전송 ==> 처리 ==> 응답 
+		// client = server = client 
+		// 나가기 요청 
+		else if(e.getSource()==wr.b6)
+		{
+			try
+			{
+				out.write((Function.CHATEND+"|\n").getBytes());
+			}catch(Exception ex) {}
+		}
+		else if(e.getSource()==wr.b5)
+		{
+			if(selectRow==-1)
+			{
+				JOptionPane.showMessageDialog(this, "정보볼 아이디를 선택하세요");
+				return;
+			}
+			String id=wr.model2.getValueAt(selectRow, 0).toString();
+			// id전송 => 정보를 보여달라 ...
+			try
+			{
+				out.write((Function.INFO+"|"+id+"\n").getBytes());
+			}catch(Exception ex) {}
+		}
+		
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -304,6 +354,24 @@ implements ActionListener,MouseListener,Runnable
 				join.tf3.setText(zip);
 				join.tf4.setText(addr);
 				post.setVisible(false);
+			}
+		}
+		else if(e.getSource()==wr.table2)
+		{
+			selectRow=wr.table2.getSelectedRow();
+			String id=wr.model2.getValueAt(selectRow, 0).toString();
+			if(id.equals(myId))
+			{
+				wr.b3.setEnabled(false);
+				wr.b4.setEnabled(false);
+				wr.b5.setEnabled(false);
+			}
+			else
+			{
+				wr.b3.setEnabled(true);
+				wr.b4.setEnabled(true);
+				wr.b5.setEnabled(true);
+			
 			}
 		}
 	}
@@ -398,7 +466,38 @@ implements ActionListener,MouseListener,Runnable
 				     case Function.WAITCHAT:
 				     {
 				    	 initStyle();
+				    	 wr.bar.setValue(wr.bar.getMaximum());
 				    	 append(st.nextToken(), st.nextToken());
+				    	 
+				     }
+				     break;
+				     case Function.MYEND:
+				     {
+				    	 dispose();
+				    	 System.exit(0);
+				     }
+				     break;
+				     case Function.CHATEND:
+				     {
+				    	 String id=st.nextToken();
+				    	 for(int i=0;i<wr.model2.getRowCount();i++)
+				    	 {
+				    		 String s=wr.model2.getValueAt(i, 0).toString();
+				    		 if(s.equals(id))
+				    		 {
+				    			 wr.model2.removeRow(i);
+				    			 break;
+				    		 }
+				    	 }
+				     }
+				     break;
+				     case Function.INFO:
+				     {
+				    	 String s="아이디:"+st.nextToken()+"\n"
+				    			 +"이름:"+st.nextToken()+"\n"
+				    			 +"주소:"+st.nextToken();
+				    	 JOptionPane.showMessageDialog(this, s);
+				    	 selectRow=-1;
 				     }
 				     break;
 				   }

@@ -152,7 +152,7 @@ public class Server implements Runnable{
     				
     				switch(protocol)
     				{
-    				   case Function.LOGIN:
+    				   case Function.LOGIN:// "로그인"
     				   {
     					   // 정보를 받는다 
     					   id=st.nextToken();
@@ -179,6 +179,52 @@ public class Server implements Runnable{
         							   +c.id+"|"+c.name+"|"+c.pos);
     					   }
     					   // 3. 개설된 방 정보 전송 
+    				   }
+    				   break;
+    				   case Function.WAITCHAT:
+    				   {
+    					   String m=st.nextToken();
+    					   String color=st.nextToken();
+    					   messageAll(Function.WAITCHAT+"|["
+    							 +name+"] "+m+"|"+color);
+    					   
+    				   }
+    				   break;
+    				   case Function.CHATEND:
+    				   {
+    					   messageAll(Function.WAITCHAT+"|[알림 ☞]"
+    							   +name+"님이 퇴장하셨습니다|red");
+    					   messageAll(Function.CHATEND+"|"+id);
+    					   
+    					   messageTo(Function.MYEND+"|");
+    					   
+    					  for(Client c:waitVc)
+    					  {
+    						  if(c.id.equals(id))
+    						  {
+    							  waitVc.remove(c);
+    							  in.close();
+    							  out.close();
+    							  break;
+    						  }
+    					  }
+    					   
+    				   }
+    				   break;
+    				   case Function.INFO:
+    				   {
+    					   String youId=st.nextToken();
+    					   for(Client user:waitVc)
+    					   {
+    						   if(user.id.equals(youId))
+    						   {
+    							   messageTo(Function.INFO+"|"
+    									 +user.id+"|"
+    									 +user.name+"|"
+    									 +user.address);
+    							   break;
+    						   }
+    					   }
     				   }
     				   break;
     				}
