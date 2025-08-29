@@ -6,11 +6,16 @@ import javax.swing.text.*;
 
 
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.*;
+
+import com.sist.commons.Function;
 import com.sist.dao.*;
 // login ==> "100|id|pwd\m" => String => login.jsp?id=aaa&pwd=1234
 public class ClientMainForm extends JFrame
-implements ActionListener,MouseListener
+implements ActionListener,MouseListener,Runnable
 {
     CardLayout card=new CardLayout();
     // LOGIN / JOIN / WAIT / ROOM
@@ -18,6 +23,19 @@ implements ActionListener,MouseListener
     JoinForm join=new JoinForm();
     PostFindForm post=new PostFindForm();
     WaitRoom wr=new WaitRoom();
+    
+    /*
+     *   변수 => 네트워크와 관련 
+     */
+    // 연결할 수 있는 기기 => 소프트웨어로 제작 
+    Socket s;
+    // 서버와 송수신 
+    OutputStream out; // 서버에 요청 
+    BufferedReader in;// 서벌부터 응답을 받는다 
+    // 오라클 => PreparedStatement 
+    String myId;
+    // => 모든 클라이어언트는 서버의 명령을 받아서 처리 
+    // 서버 : 관리자 , 클라이언트 : 노예 
     public ClientMainForm()
     {
     	setLayout(card);
@@ -55,6 +73,32 @@ implements ActionListener,MouseListener
 			UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
 		}catch(Exception e) {}
         new ClientMainForm();
+	}
+	// 연결 
+	public void connection(String id,String name,String address)
+	{
+		try
+		{
+			// 서버와 연결 
+			s=new Socket("localhost",3355);
+			//            서버 IP     서버에서 지정한 PORT
+			// 서버는 고정 PORT , 클라이언트 자동 생성 
+			// 송수신 
+			// 서버에서 데이터 읽기 : 응답  => HttpServletResponse
+			in=new BufferedReader(new InputStreamReader(s.getInputStream()));
+			// InputStreamReader보조 스트림 
+			// byte => char 
+			// 서버로 데이터 보내기 : 요청  => HttpServletRequest 
+			out=s.getOutputStream();
+			
+			// 서버로 로그인 요청 
+			out.write((Function.LOGIN+"|"+
+			    id+"|"+name+"|"+address+"\n").getBytes());
+			// readLine => 반드시 마지막에 \n
+		}catch(Exception ex){}
+		
+		// 서버로부터 데이터를 읽기 시작 
+		new Thread(this).start();
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -99,9 +143,7 @@ implements ActionListener,MouseListener
 			else
 			{
 				// 서버 연결 
-				JOptionPane.showMessageDialog(this, "로그인되었습니다.");
-				setTitle(vo.getName());
-				card.show(getContentPane(), "wr");
+				connection(vo.getId(), vo.getName(), vo.getAddr1());
 			}
 		}
 		else if(e.getSource()==login.b2)
@@ -318,6 +360,50 @@ implements ActionListener,MouseListener
 			   doc.insertString(doc.getLength(), msg+"\n",
 					   wr.pane.getStyle(color));
 		   }catch(Exception ex){}
+	   }
+	   @Override
+	   public void run() {
+		// TODO Auto-generated method stub
+		// 서버에서 데이터 읽기 
+		   try
+		   {
+			   while(true)
+			   {
+				   String msg=in.readLine();
+				   StringTokenizer st=
+						   new StringTokenizer(msg,"|");
+				   int protocol=Integer.parseInt(st.nextToken());
+				   switch(protocol)
+				   {
+				     case Function.LOGIN:
+				     {
+				    	 // id / name / pos
+				    	 String[] data= {
+				    		st.nextToken(), 
+				    		st.nextToken(),
+				    		st.nextToken()
+				    	 };
+				    	 wr.model2.addRow(data);
+				     }
+				     break;
+				     case Function.MYLOG:
+				     {
+				    	 myId=st.nextToken();
+				    	 String name=st.nextToken();
+				    	 setTitle(name); // 윈도우 구분 
+				    	 // 화면 이동 => Login => WaitRoom으로 변경
+				    	 card.show(getContentPane(), "wr");
+				     }
+				     break;
+				     case Function.WAITCHAT:
+				     {
+				    	 initStyle();
+				    	 append(st.nextToken(), st.nextToken());
+				     }
+				     break;
+				   }
+			   }
+		   }catch(Exception ex) {}
 	   }
 	
 }
